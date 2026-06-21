@@ -1,0 +1,76 @@
+INSERT INTO defectos (
+  proyecto_id, caso_prueba_id, codigo, titulo, descripcion,
+  pasos_reproduccion, resultado_obtenido, resultado_esperado,
+  ambiente, version, severidad, prioridad, estado,
+  asignado_a, reportado_por
+) VALUES
+  (1, 1, 'DEF-001', 'Login no redirige al dashboard tras autenticación',
+   'Al ingresar credenciales válidas el sistema no redirige correctamente.',
+   '1. Ir a /login. 2. Ingresar admin@qa.com. 3. Clic en Iniciar Sesión',
+   'La página permanece en /login sin redirección',
+   'El sistema debe redirigir al dashboard principal',
+   'QA', '1.0.0', 'Alto', 'Alta', 'Asignado', 4, 3),
+
+  (1, 1, 'DEF-002', 'Token JWT no se refresca al expirar sesión',
+   'Después de 24h el token expira pero no se solicita reautenticación.',
+   '1. Iniciar sesión. 2. Esperar expiración. 3. Intentar navegar',
+   'Error 401 sin redirección al login',
+   'Debe redirigir automáticamente a /login',
+   'QA', '1.0.0', 'Crítico', 'Urgente', 'En Progreso', 4, 2),
+
+  (1, 2, 'DEF-003', 'Mensaje de error no descriptivo en login fallido',
+   'El mensaje de error no indica si el problema es email o contraseña.',
+   '1. Ingresar email válido. 2. Ingresar contraseña incorrecta. 3. Clic en Iniciar Sesión',
+   'Mensaje genérico: Error de autenticación',
+   'Mensaje claro: Contraseña incorrecta',
+   'QA', '1.0.0', 'Bajo', 'Baja', 'Nuevo', 8, 3),
+
+  (1, 3, 'DEF-004', 'Campo email acepta formato inválido sin validación',
+   'El formulario permite enviar emails sin formato correcto.',
+   '1. Ir a /login. 2. Ingresar texto sin @ en email. 3. Clic en Iniciar Sesión',
+   'La petición se envía al backend con email inválido',
+   'Validación frontend debe bloquear el envío',
+   'Desarrollo', '1.0.0', 'Medio', 'Media', 'En Revisión', 8, 6),
+
+  (1, 4, 'DEF-005', 'Foto de perfil no se actualiza en el header tras edición',
+   'Al editar el perfil la imagen actualizada no se refleja en el header hasta recargar.',
+   '1. Ir a edición de perfil. 2. Cambiar foto. 3. Guardar. 4. Observar header',
+   'El header sigue mostrando la imagen anterior',
+   'El header debe reflejar el cambio inmediatamente',
+   'QA', '1.1.0', 'Medio', 'Media', 'Asignado', 4, 7),
+
+  (2, 5, 'DEF-006', 'Email de bienvenida no se envía al registrar usuario',
+   'Tras registro exitoso el usuario no recibe email de confirmación.',
+   '1. Ir a /registro. 2. Completar formulario con datos válidos. 3. Enviar',
+   'No se recibe email en la bandeja de entrada',
+   'Se debe enviar email de bienvenida automáticamente',
+   'Staging', '2.0.0', 'Alto', 'Alta', 'Nuevo', 8, 3),
+
+  (2, 6, 'DEF-007', 'Registro permite email duplicado sin error claro',
+   'Al registrar un email ya existente el error no es visible en el formulario.',
+   '1. Registrar usuario con email@test.com. 2. Intentar registrar mismo email',
+   'Formulario se limpia sin mostrar mensaje de error',
+   'Mostrar error: Este email ya está registrado',
+   'QA', '2.0.0', 'Alto', 'Alta', 'Resuelto', 4, 6),
+
+  (2, 8, 'DEF-008', 'Sesión no persiste entre pestañas del navegador',
+   'Al abrir una nueva pestaña el usuario aparece como no autenticado.',
+   '1. Iniciar sesión. 2. Abrir nueva pestaña con la aplicación',
+   'Nueva pestaña solicita login nuevamente',
+   'La sesión debe persistir entre pestañas del mismo navegador',
+   'QA', '2.0.0', 'Medio', 'Media', 'En Progreso', 8, 2),
+
+  (2, 9, 'DEF-009', 'Contador de intentos fallidos no se resetea tras éxito',
+   'Si el usuario falla 3 veces y luego acierta, el contador no se resetea.',
+   '1. Fallar login 3 veces. 2. Ingresar correctamente. 3. Fallar 2 veces más',
+   'El sistema bloquea tras solo 2 intentos adicionales',
+   'El contador debe resetearse en cada login exitoso',
+   'Staging', '2.0.0', 'Medio', 'Alta', 'Nuevo', 4, 7),
+
+  (2, 10, 'DEF-010', 'Paginación del catálogo no mantiene filtros activos',
+   'Al cambiar de página en el catálogo los filtros aplicados se pierden.',
+   '1. Aplicar filtro por categoría. 2. Navegar a la página 2',
+   'La página 2 muestra todos los productos sin filtro',
+   'Los filtros deben persistir al paginar',
+   'QA', '2.1.0', 'Alto', 'Alta', 'Asignado', 8, 3)
+ON CONFLICT (codigo) DO NOTHING;
