@@ -65,7 +65,7 @@ ON CONFLICT (email) DO NOTHING;
 -- ---------------------------------------------------------------
 INSERT INTO proyectos (
   proyecto, nombre, cliente, codigo, responsable_qa_id,
-  estado, iteracion,
+  estado,
   fecha_inicio_planificada, fecha_fin_planificada,
   porcentaje_avance, sistema, notas,
   repositorio_url,
@@ -78,7 +78,6 @@ SELECT
   'PWC-2024',
   (SELECT id FROM usuarios WHERE email = 'qa.lead@qa.com'),
   'En Ejecución',
-  1,
   '2024-01-15',
   '2024-06-30',
   45.00,
@@ -107,7 +106,7 @@ SELECT
 FROM proyectos p, usuarios u
 WHERE p.codigo = 'PWC-2024'
   AND u.email  = 'admin@qa.com'
-ON CONFLICT (codigo) DO NOTHING;
+ON CONFLICT (proyecto_id, codigo) DO NOTHING;
 
 -- ---------------------------------------------------------------
 -- Caso de prueba de demostración
@@ -139,4 +138,4 @@ SELECT
     {"orden":4,"descripcion":"Hacer clic en Iniciar Sesión","resultadoEsperado":"Redirección al dashboard principal"}
   ]'::jsonb,
   (SELECT id FROM usuarios WHERE email = 'admin@qa.com')
-ON CONFLICT (codigo_cp) DO NOTHING;
+ON CONFLICT (proyecto_id, codigo_cp) DO NOTHING;

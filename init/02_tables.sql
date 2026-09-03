@@ -91,7 +91,7 @@ COMMENT ON COLUMN proyectos.fecha_fin_real          IS 'Fecha de fin real de la 
 CREATE TABLE IF NOT EXISTS requerimientos (
   id                   SERIAL                  PRIMARY KEY,
   proyecto_id          INTEGER                 NOT NULL REFERENCES proyectos(id) ON DELETE CASCADE,
-  codigo               VARCHAR(30)             NOT NULL UNIQUE,
+  codigo               VARCHAR(30)             NOT NULL,
   titulo               VARCHAR(300)            NOT NULL,
   descripcion          TEXT                    NOT NULL,
   criterios_aceptacion TEXT                    NOT NULL,
@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS requerimientos (
   estado               estado_requerimiento    NOT NULL DEFAULT 'Pendiente',
   creado_por           INTEGER                 NOT NULL REFERENCES usuarios(id),
   creado_en            TIMESTAMPTZ             NOT NULL DEFAULT NOW(),
-  actualizado_en       TIMESTAMPTZ             NOT NULL DEFAULT NOW()
+  actualizado_en       TIMESTAMPTZ             NOT NULL DEFAULT NOW(),
+  CONSTRAINT uq_requerimiento_proyecto_codigo UNIQUE (proyecto_id, codigo)
 );
 
 COMMENT ON TABLE  requerimientos        IS 'Requerimientos funcionales y no funcionales por proyecto';
@@ -113,7 +114,7 @@ COMMENT ON COLUMN requerimientos.codigo IS 'Código único del requerimiento (ej
 CREATE TABLE IF NOT EXISTS casos_prueba (
   id                   SERIAL                  PRIMARY KEY,
   -- Identificación (SharePoint)
-  codigo_cp            VARCHAR(30)             UNIQUE,                            -- "Codigo CP"
+  codigo_cp            VARCHAR(30),                                               -- "Codigo CP"
   nombre               VARCHAR(300)            NOT NULL,                          -- "Nombre del Caso de Prueba"
   proyecto_id          INTEGER                 NOT NULL REFERENCES proyectos(id) ON DELETE CASCADE,  -- "Proyecto"
   clave_proyecto       VARCHAR(50),                                               -- "ClaveProyecto"
@@ -136,7 +137,8 @@ CREATE TABLE IF NOT EXISTS casos_prueba (
   -- Auditoría
   creado_por           INTEGER                 NOT NULL REFERENCES usuarios(id),
   creado_en            TIMESTAMPTZ             NOT NULL DEFAULT NOW(),
-  actualizado_en       TIMESTAMPTZ             NOT NULL DEFAULT NOW()
+  actualizado_en       TIMESTAMPTZ             NOT NULL DEFAULT NOW(),
+  CONSTRAINT uq_caso_prueba_proyecto_codigo UNIQUE (proyecto_id, codigo_cp)
 );
 
 COMMENT ON TABLE  casos_prueba                    IS 'Casos de prueba — estructura basada en SharePoint "Casos de prueba Proyectos"';
@@ -151,7 +153,7 @@ COMMENT ON COLUMN casos_prueba.evidencia_url      IS 'URL de captura o evidencia
 CREATE TABLE IF NOT EXISTS defectos (
   id                 SERIAL              PRIMARY KEY,
   proyecto_id        INTEGER             NOT NULL REFERENCES proyectos(id) ON DELETE CASCADE,
-  caso_prueba_id     INTEGER             NOT NULL REFERENCES casos_prueba(id),
+  caso_prueba_id     INTEGER             NOT NULL REFERENCES casos_prueba(id) ON DELETE RESTRICT,
   requerimiento_id   INTEGER             REFERENCES requerimientos(id) ON DELETE SET NULL,
   codigo             VARCHAR(30)         UNIQUE,
   codigo_proyecto    VARCHAR(30),
@@ -171,7 +173,8 @@ CREATE TABLE IF NOT EXISTS defectos (
   estado_desarrollo       estado_desarrollo,
   comentarios_desarrollo  TEXT,
   creado_en               TIMESTAMPTZ         NOT NULL DEFAULT NOW(),
-  actualizado_en          TIMESTAMPTZ         NOT NULL DEFAULT NOW()
+  actualizado_en          TIMESTAMPTZ         NOT NULL DEFAULT NOW(),
+  CONSTRAINT uq_defecto_proyecto_codigo_proyecto UNIQUE (proyecto_id, codigo_proyecto)
 );
 
 COMMENT ON TABLE  defectos                   IS 'Defectos/bugs encontrados durante las pruebas';

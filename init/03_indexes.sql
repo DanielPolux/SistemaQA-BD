@@ -155,6 +155,23 @@ CREATE INDEX IF NOT EXISTS idx_comentarios_defecto_usuario_id
   ON comentarios_defecto(usuario_id);
 
 -- ---------------------------------------------------------------
+-- Índices compuestos para filtros frecuentes combinados
+-- ---------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_defectos_proyecto_estado
+  ON defectos(proyecto_id, estado);
+
+CREATE INDEX IF NOT EXISTS idx_casos_prueba_proyecto_estado
+  ON casos_prueba(proyecto_id, estado);
+
+CREATE INDEX IF NOT EXISTS idx_requerimientos_proyecto_estado
+  ON requerimientos(proyecto_id, estado);
+
+-- Índice parcial: defectos abiertos por responsable (usado en dashboard y filtros frecuentes)
+CREATE INDEX IF NOT EXISTS idx_defectos_asignado_abiertos
+  ON defectos(asignado_a)
+  WHERE estado NOT IN ('Cerrado', 'Resuelto', 'Rechazado');
+
+-- ---------------------------------------------------------------
 -- NOTA: Los índices gin_trgm_ops requieren la extensión pg_trgm.
 -- Activarla con: CREATE EXTENSION IF NOT EXISTS pg_trgm;
 -- Si no se desea instalar, eliminar los índices *_trgm de arriba.
