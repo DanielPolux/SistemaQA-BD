@@ -9,12 +9,12 @@ BEGIN;
 -- ================================================================
 -- 1. USUARIOS
 -- ================================================================
-INSERT INTO usuarios (nombre, apellido, email, password, rol, activo) VALUES
-  ('Luis',         'Paredes',   'tester2@qa.com',    '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Tester',       TRUE),
-  ('Sandra',       'Flores',    'tester3@qa.com',    '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Tester',       TRUE),
-  ('Roberto',      'Vega',      'developer2@qa.com', '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'Desarrollador',   TRUE),
-  ('Patricia',     'Diaz',      'qa.lead2@qa.com',   '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Lead',         TRUE),
-  ('Miguel Angel', 'Santos',    'pm2@qa.com',        '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'Project Manager', TRUE)
+INSERT INTO usuarios (nombre, apellido, username, email, password, rol, activo) VALUES
+  ('Luis',         'Paredes',   'luisparedes',      'tester2@qa.com',    '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Tester',       TRUE),
+  ('Sandra',       'Flores',    'sandraflores',     'tester3@qa.com',    '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Tester',       TRUE),
+  ('Roberto',      'Vega',      'robertovega',      'developer2@qa.com', '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'Desarrollador',   TRUE),
+  ('Patricia',     'Diaz',      'patriciadiaz',     'qa.lead2@qa.com',   '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'QA Lead',         TRUE),
+  ('Miguel Angel', 'Santos',    'miguelangelsantos','pm2@qa.com',        '$2b$10$wH3PoZVGi8XsZ/FWWxfMYOmWU.X.xUFEBdUqRO6dHY3bj4sIdpRpK', 'Project Manager', TRUE)
 ON CONFLICT (email) DO NOTHING;
 
 -- ================================================================
